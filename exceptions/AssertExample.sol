@@ -6,6 +6,7 @@ pragma solidity ^0.5.3;
   sent 10 eth to the contract twice => the balance won't be 20
   with assert:
   second time sending 10 eth throws error
+  no gas refund
 */
 
 contract AssertExample {

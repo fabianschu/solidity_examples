@@ -1,7 +1,9 @@
 pragma solidity ^0.8.2;
 
-// require => meant for input validation
-// assert => more for checking internal state (= invariance)
+/*
+  require => meant for input validation
+  remaining gas is paid back
+*/
 
 contract RequireExample {
     mapping(address => uint) public balanceReceived;
