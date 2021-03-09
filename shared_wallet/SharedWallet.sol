@@ -2,19 +2,26 @@ pragma solidity ^0.8.2;
 
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/access/Ownable.sol";
 
-contract SharedWallets is Ownable {
+contract Allowance is Ownable{
+    mapping(address => uint) public allowances;
     
-    struct Wallet {
-        uint maxAllowance;
-        uint usedAllowance;
+    event NewAllowanceLimit(address _allowanceAddress, uint _maxAllowance);
+    
+    function setAllowanceLimit(address _allowanceAddress, uint _maxAllowance) public onlyOwner{
+        allowances[_allowanceAddress] = _maxAllowance;
+        emit NewAllowanceLimit(_allowanceAddress, _maxAllowance);
     }
-    mapping(address => Wallet) public allowances;
     
+    function withdrawFromAllowance(uint _amount) public {
+        require(allowances[msg.sender] >= _amount, "You can't exceed your allowance");
+        allowances[msg.sender] -= _amount;
+    }
+}
+
+contract SharedWallets is Allowance {
     event NewDeposit(uint _amount);
     event TotalBalance(uint _amount);
-    event NewAllowanceLimit(address _allowanceAddress, uint _maxAllowance);
-    event ResetAllowanceLimit(address _allowanceAddress);
-    
+
     function deposit() public payable {
         emit NewDeposit(msg.value);
     }
@@ -23,26 +30,14 @@ contract SharedWallets is Ownable {
         emit NewDeposit(address(this).balance);
     }
     
-    function withdrawFromAllowance(uint _amount) public {
+    function withdraw(uint _amount) public {
         require(_amount < address(this).balance, "Not enough total funds");
         
         if(msg.sender != owner()) {
-            uint targetAllowance =  allowances[msg.sender].usedAllowance + _amount;
-            require(targetAllowance <= allowances[msg.sender].maxAllowance, "You can't exceed your allowance");
-            allowances[msg.sender].usedAllowance = targetAllowance;
+            withdrawFromAllowance(_amount);
         }
         
         payable(msg.sender).transfer(_amount);
-    }
-    
-    function resetAllowanceLimit(address _walletAddress) public onlyOwner {
-        allowances[_walletAddress].usedAllowance = 0;
-        emit ResetAllowanceLimit(_walletAddress);
-    }
-    
-    function setAllowanceLimit(address _allowanceAddress, uint _maxAllowance) public onlyOwner{
-        allowances[_allowanceAddress].maxAllowance = _maxAllowance;
-        emit NewAllowanceLimit(_allowanceAddress, _maxAllowance);
     }
     
     receive() external payable {
