@@ -39,6 +39,10 @@ contract SharedWallets is Allowance {
         
         payable(msg.sender).transfer(_amount);
     }
+
+    function renounceOwnership() override public pure {
+      revert("Ownership cannot be renounced");
+    }
     
     receive() external payable {
         emit NewDeposit(msg.value);
