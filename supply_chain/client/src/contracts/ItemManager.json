@@ -77,7 +77,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -90,7 +91,8 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function"
+      "type": "function",
+      "constant": true
     },
     {
       "inputs": [],
@@ -141,7 +143,8 @@
       "name": "triggerPayment",
       "outputs": [],
       "stateMutability": "payable",
-      "type": "function"
+      "type": "function",
+      "payable": true
     },
     {
       "inputs": [
@@ -5924,9 +5927,62 @@
     "name": "solc",
     "version": "0.7.6+commit.7338295f.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "5777": {
+      "events": {
+        "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "previousOwner",
+              "type": "address"
+            },
+            {
+              "indexed": true,
+              "internalType": "address",
+              "name": "newOwner",
+              "type": "address"
+            }
+          ],
+          "name": "OwnershipTransferred",
+          "type": "event"
+        },
+        "0xa4035636e99f06b7651a604c1019fa4e8779fe68ef27eeb74dff2de348f6199b": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_itemIndex",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "uint256",
+              "name": "_step",
+              "type": "uint256"
+            },
+            {
+              "indexed": false,
+              "internalType": "address",
+              "name": "_address",
+              "type": "address"
+            }
+          ],
+          "name": "SupplyChainStep",
+          "type": "event"
+        }
+      },
+      "links": {},
+      "address": "0x6aeEcc962Fa2c4e596006F5E08d9C376626e7f10",
+      "transactionHash": "0x805bc7c49521255883135bcdf38383f90755116d06bc8dcf055d6ed026bffc2d"
+    }
+  },
   "schemaVersion": "3.3.4",
-  "updatedAt": "2021-03-13T00:32:52.055Z",
+  "updatedAt": "2021-03-13T09:08:48.057Z",
+  "networkType": "ethereum",
   "devdoc": {
     "kind": "dev",
     "methods": {
