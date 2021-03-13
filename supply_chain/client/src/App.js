@@ -47,6 +47,7 @@ class App extends Component {
         },
         this.runExample
       );
+      this.listenToPaymentEvent();
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -54,6 +55,20 @@ class App extends Component {
       );
       console.error(error);
     }
+  };
+
+  listenToPaymentEvent = () => {
+    this.state.contract.itemManagerInstance.events
+      .SupplyChainStep()
+      .on("data", async (e) => {
+        console.log(e.returnValues._step);
+        if (e.returnValues._step === "1") {
+          const itemObj = await this.state.contract.itemManagerInstance.methods
+            .items(e.returnValues._itemIndex)
+            .call();
+          alert(`Item ${itemObj._identifier} was paid`);
+        }
+      });
   };
 
   handleChange = (e) => {
@@ -67,14 +82,13 @@ class App extends Component {
     let result = await this.state.contract.itemManagerInstance.methods
       .createItem(identifier, cost)
       .send({ from: this.state.accounts[0] });
-    console.log(result);
+
     alert(
       "Send " +
         cost +
         " Wei to " +
         result.events.SupplyChainStep.returnValues._address
     );
-    console.log(result);
   };
 
   render() {
